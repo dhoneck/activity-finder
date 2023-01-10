@@ -4,14 +4,35 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="./assets/css/styles.css">
   <title>Activity Finder</title>
 </head>
 <body>
   <header>
     <h1>Activity Finder</h1>
+    <a id="favorite">Favorite ☆</a>
   </header>
-  <main>Content Goes Here</main>
+  <main>
+    <form>
+      <select id='type-field' class="form-select" aria-label="Default select example">
+        <option value="all" selected>All Activities</option>
+        <option value="education">Education</option>
+        <option value="recreational">Recreational</option>
+        <option value="social">Social</option>
+        <option value="diy">DIY</option>
+        <option value="charity">Charity</option>
+        <option value="cooking">Cooking</option>
+        <option value="relaxation">Relaxation</option>
+        <option value="music">Music</option>
+        <option value="busywork">Busywork</option>
+      </select>
+      <input type="number" placeholder="# of Participants">
+      <button type="submit" id="find-activity">Find Activity</button>
+    </form>
+    <div id="activity-container">
+    </div>
+  </main>
   <footer>
     <p>Thank you <a href="boredapi.com">boredapi.com</a> and <a href="giphy.com">giphy.com</a></p>
   </footer>

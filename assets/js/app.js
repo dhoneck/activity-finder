@@ -1,6 +1,33 @@
 var fetchButton = document.getElementById('find-activity');
 var activityContainer = document.getElementById('activity-container');
 
+const GIPHY_API_KEY = 'YZ340zDN7GxGfiO0CaEmo7tnJkwSmxA1';
+
+
+function getGiphyImg(activity) { 
+  var encodedActivity = encodeURIComponent(activity);
+  var requestUrl = 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_API_KEY + '&q=' + encodedActivity + '&limit=10&lang=en';
+
+  fetch(requestUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (giphyData) {
+      // Get gif data and create HTML elements
+      var gif = giphyData['data'][0];
+      var br = document.createElement('br');
+      var img = document.createElement('img');
+
+      // Set image attributes
+      img.src = gif['images']['original']['url'];
+      img.alt = gif['title'];
+
+      // Add elements to page
+      activityContainer.append(br);
+      activityContainer.append(img);
+    });
+}
+
 function getApi(e) {
   e.preventDefault();
   
@@ -17,7 +44,6 @@ function getApi(e) {
   } else {
     console.log('Participants is not greater than 0');
   }
-  console.log('Fetching activity from: ' + requestUrl);
   console.log('API URL: ' + requestUrl);
 
   fetch(requestUrl)
@@ -25,7 +51,11 @@ function getApi(e) {
       return response.json();
     })
     .then(function (data) {
-      activityContainer.textContent = data['activity'];
+      var activity = data['activity'];  
+      activityContainer.textContent = activity;
+
+      // Call Giphy API
+      getGiphyImg(activity);
     });
 }
 

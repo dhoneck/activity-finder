@@ -1,0 +1,20 @@
+body {
+    height: 100vh;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 20px 0 0px 0;
+}
+
+header {
+    margin-bottom: 10px;
+}
+
+#activity-container {
+    margin: 20px 0;
+}
+footer {
+    margin-top: 20px;
+}

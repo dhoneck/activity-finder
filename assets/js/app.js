@@ -4,9 +4,9 @@ var activityContainer = document.getElementById('activity-container');
 const GIPHY_API_KEY = 'YZ340zDN7GxGfiO0CaEmo7tnJkwSmxA1';
 
 
-function getGiphyImg(activity) { 
-  var encodedActivity = encodeURIComponent(activity);
-  var requestUrl = 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_API_KEY + '&q=' + encodedActivity + '&limit=10&lang=en';
+function getGiphyImg(activityDesc, activityType) { 
+  var encodedActivity = encodeURIComponent(activityDesc);
+  var requestUrl = 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_API_KEY + '&q=' + encodedActivity + '&lang=en';
 
   fetch(requestUrl)
     .then(function (response) {
@@ -14,17 +14,27 @@ function getGiphyImg(activity) {
     })
     .then(function (giphyData) {
       // Get gif data and create HTML elements
-      var gif = giphyData['data'][0];
+      var totalGifs = giphyData['data'].length;
       var br = document.createElement('br');
       var img = document.createElement('img');
 
-      // Set image attributes
-      img.src = gif['images']['original']['url'];
-      img.alt = gif['title'];
+      if (totalGifs > 0) {
+        // Select a gif
+        var selectedGifIndex = Math.floor(Math.random() * totalGifs);
+        var gif = giphyData['data'][selectedGifIndex];
+        
+        // Set image attributes
+        img.src = gif['images']['original']['url'];
+        img.alt = gif['title'];
 
-      // Add elements to page
-      activityContainer.append(br);
-      activityContainer.append(img);
+        // Add elements to page
+        activityContainer.append(br);
+        activityContainer.append(img);
+      } else {
+        // Select a gif based on type
+        getGiphyImg(activityType, activityType);
+      }
+      
     });
 }
 
@@ -37,25 +47,22 @@ function getApi(e) {
   if (activityType != 'all') {
     requestUrl += '?type=' + activityType;
   }
-  console.log('Total participants: ' + totalParticipants);
+
   if (totalParticipants > 0) {
-    console.log('Participants is greater than 0');
     requestUrl += '?participants=' + totalParticipants;
-  } else {
-    console.log('Participants is not greater than 0');
   }
-  console.log('API URL: ' + requestUrl);
 
   fetch(requestUrl)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      var activity = data['activity'];  
-      activityContainer.textContent = activity;
+      var activityDesc = data['activity']; 
+      var activityType = data['type']; 
+      activityContainer.textContent = activityDesc;
 
       // Call Giphy API
-      getGiphyImg(activity);
+      getGiphyImg(activityDesc, activityType);
     });
 }
 

@@ -17,7 +17,7 @@ function setFavorite(activity, gifURL) {
   var favorites = getFavorites();
   for (var x = 0; x < favorites.length; x++) {
     if (favorites[x].activity === activity && favorites[x].gifURL === gifURL) {
-      console.log('"' + activity + '" is already in your list with that specific gif.');
+      console.log('"' + activity + '" is already in your list with that specific gif');
       return;
     }
   }
@@ -27,6 +27,7 @@ function setFavorite(activity, gifURL) {
       "gifURL": gifURL,
     }
   );
+  console.log('Adding "' + activity + '" to favorites');
   window.localStorage.setItem('favorites', JSON.stringify(favorites));
 
 }
@@ -103,8 +104,11 @@ function getApi(e) {
 
 fetchBtn.addEventListener('click', getApi);
 favoriteBtn.addEventListener('click', function () {
-  var activity = document.getElementById('activity').textContent;
-  var gif = document.getElementById('gif').src;
-
-  setFavorite(activity, gif);
+  try {
+    var activity = document.getElementById('activity').textContent;
+    var gif = document.getElementById('gif').src;
+    setFavorite(activity, gif);
+  } catch {
+    console.log('No activity or gif to favorite.');
+  }
 })

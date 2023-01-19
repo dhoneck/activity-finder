@@ -39,15 +39,28 @@ function setFavorite(activity, gifURL) {
   window.localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
+// Deletes an activity and gif from local storage
+function deleteFavorite(activity, gifURL) {
+  var favorites = getFavorites();
+
+  for (var x = 0; x < favorites.length; x++) {
+    if (favorites[x].activity === activity && favorites[x].gifURL === gifURL) {
+      // Remove from local storage
+      favorites.splice(x, 1);
+      window.localStorage.setItem('favorites', JSON.stringify(favorites));
+      break;
+    }
+  }
+}
+
 // Display favorites list to modal
 function displayFavorites() {
   favoritesContainer.innerHTML = '';
   var favorites = getFavorites();
-
   var h2 = document.createElement('h2');
   h2.textContent = 'Favorites';
-  h2.classList = 'is-size-2'
-  favoritesContainer.append(h2)
+  h2.classList = 'is-size-2';
+  favoritesContainer.append(h2);
 
   if (favorites.length > 0) {
     for (var x = 0; x < favorites.length; x++) {
@@ -55,22 +68,45 @@ function displayFavorites() {
       var div = document.createElement('div');
       var h4 = document.createElement('h4');
       var img = document.createElement('img');
+      var btn = document.createElement('button');
 
       // Add content and attributes to element
-      div.classList.add('my-5');
+      div.classList = 'my-5 favorite-container';
+      
       h4.textContent = favorites[x]['activity'];
       h4.classList = 'is-size-4 mb-2';
       img.src = favorites[x]['gifURL'];
       img.alt = favorites[x]['activity'];
+      btn.textContent = 'DELETE';
+      btn.style.display = 'block';
+      btn.classList = 'delete-favorite button is-danger is-light mx-auto';
 
       // Append objects
       div.append(h4);
       div.append(img);
-      
+      div.append(btn);
       favoritesContainer.append(div);
+      
+      // Event listener
+      div.addEventListener('click', function (e) {
+        var clickedEl = e.target;
+        if (clickedEl.classList == "delete-favorite button is-danger is-light mx-auto") {
+
+          // Capture activity description and giphy url
+          var imgEl = clickedEl.previousSibling;
+          var h4El = imgEl.previousSibling;
+          
+          // Remove activity from local storage
+          deleteFavorite(h4El.textContent, imgEl.src);
+
+          // Display history
+          displayFavorites();
+        }
+      });
     }
   } else {
     var p  = document.createElement('p');
+    p.textContent = 'No favorites found';
     favoritesContainer.append(p);
   }
 }
@@ -91,6 +127,7 @@ function getGiphyImg(searchDesc, activityType) {
 
       if (totalGifs > 0) {
         console.log('Found ' + totalGifs + ' results for: ' + searchDesc + ' | ' + activityType);
+
         // Select a gif
         var selectedGifIndex = Math.floor(Math.random() * totalGifs);
         var gif = giphyData['data'][selectedGifIndex];
@@ -105,10 +142,8 @@ function getGiphyImg(searchDesc, activityType) {
       } else {
         // Send activity type as the new search description
         console.log('Found 0 results for: ' + searchDesc + ' | ' + activityType);
-      
         getGiphyImg(activityType, activityType);
       }
-      
     });
 }
 

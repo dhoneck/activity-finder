@@ -114,7 +114,7 @@ function displayFavorites() {
 // Get a gif from Giphy API based on activity description
 function getGiphyImg(searchDesc, activityType) { 
   var encodedActivity = encodeURIComponent(searchDesc);
-  var requestUrl = 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_API_KEY + '&q=' + encodedActivity + '&lang=en';
+  var requestUrl = 'https://api.giphy.com/v1/gifs/search?api_key=' + GIPHY_API_KEY + '&limit=25&q=' + encodedActivity + '&lang=en';
 
   fetch(requestUrl)
     .then(function (response) {
@@ -144,6 +144,9 @@ function getGiphyImg(searchDesc, activityType) {
         console.log('Found 0 results for: ' + searchDesc + ' | ' + activityType);
         getGiphyImg(activityType, activityType);
       }
+    })
+    .catch(function (error) {
+      console.log('No results found. Try again.')
     });
 }
 

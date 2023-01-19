@@ -13,6 +13,7 @@
     <h1>Activity Finder</h1>
     <a id="favorite">Favorite ☆</a>
   </header>
+
   <main>
     <form>
       <select id='type-field' class="form-select" aria-label="Default select example">
@@ -32,10 +33,23 @@
     </form>
     <div id="activity-container">
     </div>
+    <!-- Favorites Modal -->
+    <div id="favorites-modal" class="modal">
+      <div class="modal-background" id="modal-background"></div>
+      <div class="modal-content">
+        <div class="box" id="favorites-container">
+          <!-- Generate favorites with JS -->
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close" id="close-favorites"></button>
+    </div>
   </main>
+
   <footer>
+    <a id="view-favorites">View Favorites</a>
     <p>Thank you <a href="boredapi.com">boredapi.com</a> and <a href="giphy.com">giphy.com</a></p>
   </footer>
+
   <script src="./assets/js/app.js"></script>
 </body>
 </html>
